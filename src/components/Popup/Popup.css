@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.popup {
+  display: block;
+  background-color: #FFFFFF;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+}
+
+.popup__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup__btn {
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.popup__btn-logo {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  margin-right: 36px;
+}
+
+.popup__btn-text {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 23px;
+  color: #000000;
+}
+
+.popup__list-item {
+  height: 52px;
+  box-sizing: border-box;
+  padding: 16px 32px;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  text-align: left;
+  color: #000000;
+  text-decoration: none;
+}
+
+.item-active {
+  background-color: #0B5AA1;
+  color: #FFFFFF;
+}
+
+.popup__add-adress {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+  color: #0B5AA1;
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 52px;
+  margin-left: 32px;
+}
