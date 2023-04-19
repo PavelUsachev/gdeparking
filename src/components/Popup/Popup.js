@@ -2,12 +2,15 @@ import { Link  } from 'react-router-dom';
 import "./Popup.css";
 import back from '../../img/back.png';
 
-function Popup({setAddressRoute, onClick, data}) {  
-  console.log(data)
+function Popup({clickOnBack, checkedAddress, setAddressRoute, onClick, data}) {  
 
   const list = data.map(item => {
+    console.log(item.coordinates);
+    console.log(checkedAddress.coordinates);
+    console.log(item.coordinates[0] == checkedAddress.coordinates[0] & item.coordinates[1] == checkedAddress.coordinates[1]);
+    const itemClass = `popup__list-item ${item.coordinates[0] == checkedAddress.coordinates[0] & item.coordinates[1] == checkedAddress.coordinates[1] ? 'item-active' : ''}`;
     return (
-      <Link key={Math.random()} to='/address' className="popup__list-item" onClick={handleClick} >{item.address}</Link>
+      <Link key={item.id} to='/address' className={itemClass} onClick={handleClick} >{item.address}</Link>
     )
   });
 
@@ -18,7 +21,7 @@ function handleClick(event) {
 
   return (
 <div className="popup">
-    <Link to='/start' className="popup__btn">
+    <Link to='/start' className="popup__btn" onClick={clickOnBack} >
         <img className="popup__btn-logo" src={back} alt="Стрелка назад"/>
         <span className="popup__btn-text">Назад</span>
     </Link>

@@ -26,6 +26,7 @@
   box-sizing: border-box;
   padding-top: 6px;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .footer__item-logo {
