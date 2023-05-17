@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
+
+from app.schemas.zone import ZoneToFront
 
 
 class CameraMetadata(BaseModel):
@@ -24,3 +26,7 @@ class CameraWithZones(BaseModel):
     timezone: str
     update_period: int
     last_connection: datetime
+    zones: list[ZoneToFront]
+
+    class Config:
+        extra = Extra.ignore

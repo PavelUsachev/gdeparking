@@ -24,3 +24,16 @@ async def camera_input(
     new_camera = await camera_crud.create(camera, session)
     await zone_crud.update_zones(camera, new_camera.id, session)
     return new_camera
+
+
+@router.get('/all')
+async def get_all_cameras(session: AsyncSession = Depends(get_async_session)):
+    return await camera_crud.get_all_objects_with_zones(session)
+
+
+@router.get('/{camera_id}')
+async def get_all_cameras(
+        camera_id: int,
+        session: AsyncSession = Depends(get_async_session),
+):
+    return await camera_crud.get_by_id(camera_id, session)
