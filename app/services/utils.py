@@ -31,7 +31,7 @@ async def attach_zones(camera, session):
         zones.append(
             ZoneToFront(
                 internal_id=zone.internal_id,
-                status=zone.status
+                status=zone.status,
             )
         )
     camera_with_zones = CameraWithZones(
@@ -41,6 +41,6 @@ async def attach_zones(camera, session):
         timezone=camera.timezone,
         update_period=camera.update_period,
         last_connection=camera.last_connection,
-        zones=zones
+        zones=zones,
     )
     return camera_with_zones

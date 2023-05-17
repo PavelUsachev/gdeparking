@@ -17,7 +17,6 @@ class CRUDZone(CRUDBase):
         zones_result = []
         for key, value in input_zones.items():
             zone_id = int(key.split('_')[-1])
-            print(zone_id)
             zone = await session.execute(
                 select(self.model).where(
                     and_(
@@ -28,12 +27,10 @@ class CRUDZone(CRUDBase):
             )
             zone = zone.scalars().first()
             if zone:
-                print('found')
                 setattr(zone, 'status', value)
                 session.add(zone)
                 zones_result.append(zone)
             else:
-                print('zone didnt exist')
                 db_zone = self.model(
                     internal_id=zone_id,
                     status=value,

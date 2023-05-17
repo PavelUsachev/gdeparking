@@ -12,7 +12,7 @@ router = APIRouter()
 @router.post('/')
 async def camera_input(
         camera: CameraInput,
-        session: AsyncSession = Depends(get_async_session)
+        session: AsyncSession = Depends(get_async_session),
 ):
     existing_camera = await camera_crud.get_object(camera, session)
     if existing_camera:
