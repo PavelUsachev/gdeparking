@@ -45,5 +45,4 @@ class CRUDZone(CRUDBase):
         return zones_result
 
 
-
 zone_crud = CRUDZone(Zone)
