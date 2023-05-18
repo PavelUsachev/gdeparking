@@ -32,8 +32,13 @@ async def get_all_cameras(session: AsyncSession = Depends(get_async_session)):
 
 
 @router.get('/{camera_id}')
-async def get_all_cameras(
+async def get_camera(
         camera_id: int,
         session: AsyncSession = Depends(get_async_session),
 ):
     return await camera_crud.get_by_id(camera_id, session)
+
+
+@router.post('/test')
+async def test(camera: CameraInput, session: AsyncSession = Depends(get_async_session)):
+    return await zone_crud.update_zones(camera, 1, session)
