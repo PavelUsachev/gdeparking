@@ -26,18 +26,18 @@ class CRUDZone(CRUDBase):
         )
         existing_zones = existing_zones.scalars().all()
         for zone in existing_zones:
-            if zone.id in zones_internal_ids:
-                id_index = zones_internal_ids.index(zone.id)
+            if zone.internal_id in zones_internal_ids:
+                id_index = zones_internal_ids.index(zone.internal_id)
                 input_id = 'zone_' + str(zones_internal_ids.pop(id_index))
                 setattr(zone, 'status', input_zones[input_id])
                 session.add(zone)
             else:
                 await session.delete(zone)
         for zone_id in zones_internal_ids:
-            input_id = 'zone_' + str(zones_internal_ids.pop(zone_id))
+            input_id = 'zone_' + str(zone_id)
             db_zone = self.model(
-                internal_id=id,
-                status=input_zones[input_id],
+                internal_id=zone_id,
+                status=bool(input_zones[input_id]),
                 camera_id=camera_id
             )
             session.add(db_zone)
