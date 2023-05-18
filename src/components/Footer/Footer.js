@@ -10,7 +10,7 @@ function Footer({addressRoute}) {
   return (
     
     <footer className="footer__menu">
-      <nav className="footer__menu">
+      {/*<nav className="footer__menu">*/}
       <Link to='#' id="search" className="footer__menu-item">
         <img className="footer__item-logo" src={search} alt="Поиск" />
         <span className="footer__item-text">Поиск</span>
@@ -23,7 +23,7 @@ function Footer({addressRoute}) {
         <img className="footer__item-logo" src={set} alt="Поиск" />
         <span className="footer__item-text">Настройки</span>
     </Link>
-      </nav>
+     {/* </nav>*/}
       
     
 

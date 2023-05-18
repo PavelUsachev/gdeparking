@@ -1,19 +1,27 @@
-import { Route, Routes, NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import "./App.css";
 
 import Main from "../Main/Main";
 import StartPage from '../StartPage/StartPage';
 import Address from '../Address/Address';
 import Popup from '../Popup/Popup.js';
+import NotFound from '../NotFound/NotFound';
 
 function App() {
   const startCoordinates = {coordinates: [55.7, 37.6], zoom: 10}
+  const address = JSON.parse(localStorage.getItem("place"));
+  console.log(address);
 
-  const [place, setPlace] = useState({});
-  const [addressRoute, setAddressRoute] = useState(false);
-  const [startPlace, setStartPlace] = useState(startCoordinates);
-  const [freePlaces, setFreePlaces] = useState([]);
+  const [place, setPlace] = useState(address);
+  const [addressRoute, setAddressRoute] = useState(!address || Object.keys(address).length === 0 ? false : true);
+  const [startPlace, setStartPlace] = useState(!address || Object.keys(address).length === 0 ? startCoordinates : {coordinates: address.coordinates, zoom: address.zoom});
+  const [freePlaces, setFreePlaces] = useState(!address || Object.keys(address).length === 0 ? 0 : address.freePlaces);
+
+  useEffect(() => {
+    localStorage.setItem("place", JSON.stringify(place));
+  }, [place])
+
 
 
   const data = [ {coordinates: [55.815559, 37.797137], zoom: 20, address: 'Улица Уральская, д. 7', 
@@ -24,6 +32,17 @@ function App() {
   {coordinates: [41.794093, 44.755011], zoom: 20, address: 'Улица Петри Ибери, д. 24', freePlaces: [], id: 3}
 
 ]
+
+// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+let vh = window.innerHeight * 0.01;
+// Then we set the value in the --vh custom property to the root of the document
+document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+window.addEventListener('resize', () => {
+  // We execute the same script as before
+  let vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+});
 
 function clickOnBack () {
   setAddressRoute(false);
@@ -45,13 +64,14 @@ function clickOnBack () {
 
   return (
     <Routes>
-          <Route exact path="/" element={<StartPage />} />
             
           <Route path="start" element={<Main freePlaces={freePlaces} startPlace={startPlace} addressRoute={addressRoute} />} />
           
           <Route path="address" element={<><Main freePlaces={freePlaces} startPlace={startPlace} addressRoute={addressRoute}/> <Address place={place} /></>} />
           <Route path="popup" element={<Popup clickOnBack={clickOnBack} checkedAddress={startPlace} setAddressRoute={setAddressRoute} onClick={onClick} data={data} />} />
-  </Routes>
+          <Route exact path="/" element={<StartPage />} />
+  				<Route path="*" element={<NotFound />} />
+		</Routes>
 
   );
 }
