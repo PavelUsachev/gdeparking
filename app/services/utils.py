@@ -9,10 +9,15 @@ from app.schemas.zone import ZoneToFront
 FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
+def split(key):
+    return int(key.split('_')[-1])
+
+
 def input_to_model_converter(data):
     date = datetime.strptime(data['last_connection'], FORMAT)
+    cam_id = split(data['metadata']['cam_id'])
     new_obj = dict()
-    new_obj['id'] = data['metadata']['cam_id']
+    new_obj['id'] = cam_id
     new_obj['address'] = data['metadata']['cam_address']
     new_obj['parking_places'] = data['metadata']['park_places_nb']
     new_obj['timezone'] = data['metadata']['timezone']

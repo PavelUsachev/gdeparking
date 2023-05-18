@@ -7,13 +7,18 @@ from app.services.base import CRUDBase
 from app.services.utils import attach_zones, input_to_model_converter
 
 
+def split(key):
+    return int(key.split('_')[-1])
+
+
 class CRUDCamera(CRUDBase):
 
     async def get_object(self, input_obj, session: AsyncSession):
         data = input_obj.dict()
+        cam_id = split(data['metadata']['cam_id'])
         obj = await session.execute(
             select(self.model).where(
-                self.model.id == data['metadata']['cam_id']
+                self.model.id == cam_id
             )
         )
         obj = obj.scalars().first()

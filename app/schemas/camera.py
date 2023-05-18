@@ -6,7 +6,7 @@ from app.schemas.zone import ZoneToFront
 
 
 class CameraMetadata(BaseModel):
-    cam_id: int
+    cam_id: str
     cam_address: str
     park_places_nb: int
     timezone: str
