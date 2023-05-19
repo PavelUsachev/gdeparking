@@ -1,7 +1,14 @@
-import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
-import './MapComponent.css';
+import {
+  YMaps,
+  Map,
+  Placemark,
+  GeolocationControl,
+  SearchControl,
+} from "@pbe/react-yandex-maps";
+import "./MapComponent.css";
 
-function MapComponent({freePlaces, startPlace}) {
+function MapComponent({ freePlaces, startPlace }) {
+  const apiKey = process.env.REACT_APP_YAMAP_API;
   /*const points = [
     [55.9, 37.8],
     [55.95, 37.7],
@@ -26,27 +33,36 @@ function MapComponent({freePlaces, startPlace}) {
 
       })*/
 
-    let newPoints;
+  let newPoints;
   if (freePlaces) {
     newPoints = freePlaces.map((item) => {
-      return <Placemark key={Math.random()} geometry={item} options={{preset: 'islands#darkGreenAutoIcon'}} />;
+      return (
+        <Placemark
+          key={Math.random()}
+          geometry={item}
+          options={{ preset: "islands#darkGreenAutoIcon" }}
+        />
+      );
     });
-}
+  }
   return (
-    <YMaps>
-      <Map id="map" className="map"
+    <YMaps query={{ lang: "RU", apikey: apiKey }}>
+      <Map
+        id="map"
+        className="map"
         defaultState={{
           center: startPlace.coordinates,
           zoom: startPlace.zoom,
         }}
       >
         {newPoints}
+        <GeolocationControl options={{ float: "left" }} />
+        <SearchControl
+          options={{ float: "right", placeholderContent: "Поиск адреса" }}
+        />
       </Map>
-
     </YMaps>
-
   );
 }
-
 
 export default MapComponent;
