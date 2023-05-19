@@ -11,8 +11,8 @@ function Popup({
 }) {
   const list = data.map((item) => {
     const itemClass = `popup__list-item ${
-      (item.coordinates[0] == checkedAddress.coordinates[0]) &
-      (item.coordinates[1] == checkedAddress.coordinates[1])
+      (item.coordinates[0] === checkedAddress.coordinates[0]) &
+      (item.coordinates[1] === checkedAddress.coordinates[1])
         ? "item-active"
         : ""
     }`;

@@ -4,13 +4,13 @@ import pin from "../../img/pin.png";
 
 function Address({ place }) {
   const roundClass = `lights__round ${
-    place?.freePlaces?.length === 0 ? "red" : ""
+    place.freePlaces.length === 0 ? "red" : ""
   }`;
   return (
     <>
       <div className="lights">
         <p className={roundClass}>
-          {place?.freePlaces?.length === 0 ? "" : place?.freePlaces?.length}
+          {place.freePlaces.length === 0 ? "" : place.freePlaces.length}
         </p>
       </div>
 
