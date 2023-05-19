@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Popup.css";
 import back from "../../img/back.png";
 
@@ -9,6 +9,8 @@ function Popup({
   onClick,
   data,
 }) {
+  const navigate = useNavigate();
+
   const list = data.map((item) => {
     const itemClass = `popup__list-item ${
       (item.coordinates[0] === checkedAddress.coordinates[0]) &
@@ -16,22 +18,19 @@ function Popup({
         ? "item-active"
         : ""
     }`;
+
+    function handleClick(event) {
+      onClick(event);
+      setAddressRoute(true);
+      navigate("/start");
+    }
+
     return (
-      <Link
-        key={item.id}
-        to="/address"
-        className={itemClass}
-        onClick={handleClick}
-      >
+      <Link key={item.id} className={itemClass} onClick={handleClick}>
         {item.address}
       </Link>
     );
   });
-
-  function handleClick(event) {
-    onClick(event);
-    setAddressRoute(true);
-  }
 
   return (
     <div className="popup">

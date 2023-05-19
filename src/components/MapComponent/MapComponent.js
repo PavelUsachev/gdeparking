@@ -53,6 +53,7 @@ function MapComponent({ freePlaces, startPlace }) {
         defaultState={{
           center: startPlace.coordinates,
           zoom: startPlace.zoom,
+          controls: [],
         }}
       >
         {newPoints}
