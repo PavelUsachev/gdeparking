@@ -4,11 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models import Camera
 from app.services.base import CRUDBase
-from app.services.utils import attach_zones, input_to_model_converter
-
-
-def split(key):
-    return int(key.split('_')[-1])
+from app.services.utils import attach_zones, input_to_model_converter, split
 
 
 class CRUDCamera(CRUDBase):
