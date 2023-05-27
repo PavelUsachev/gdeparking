@@ -4,17 +4,15 @@ import search from "../../img/search.svg";
 import star from "../../img/star.svg";
 import set from "../../img/settings.svg";
 
-function Footer({ addressRoute }) {
-  const addressClass = `footer__menu-item ${addressRoute ? "active" : ""}`;
-
+function Footer() {
   return (
     <footer className="footer__menu">
       <nav className="footer__menu">
-        <Link to="#" id="search" className="footer__menu-item">
+        <Link to="/start" id="search" className="footer__menu-item">
           <img className="footer__item-logo" src={search} alt="Поиск" />
           <span className="footer__item-text">Поиск</span>
         </Link>
-        <Link to="/popup" id="address" className={addressClass}>
+        <Link to="/popup" id="address" className="footer__menu-item">
           <img className="footer__item-logo" src={star} alt="Мои адреса" />
           <span className="footer__item-text">Мои адреса</span>
         </Link>

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   YMaps,
   Map,
@@ -6,58 +7,43 @@ import {
   SearchControl,
 } from "@pbe/react-yandex-maps";
 import "./MapComponent.css";
+import iconMapDis from "../../img/icon.svg";
 
-function MapComponent({ freePlaces, startPlace }) {
+function MapComponent({ data }) {
   const apiKey = process.env.REACT_APP_YAMAP_API;
-  /*const points = [
-    [55.9, 37.8],
-    [55.95, 37.7],
-    [55.8, 37.64],
-  ];
-  freePlaces.forEach(point => {
-    const myPlacemark = new Placemark(point, {
-        hintContent: "Место свободно",
-        }, {
-        iconLayout: 'default#imageWithContent',
-        iconImageHref: ../../img/icon.svg,
-        // Размеры метки.
-        iconImageSize: [30, 30],
-        // Смещение левого верхнего угла иконки относительно
-        // её "ножки" (точки привязки).
-        iconImageOffset: [-15, -15],
-        // Смещение слоя с содержимым относительно слоя с картинкой.
-        //iconContentOffset: [15, 15],
-        // Макет содержимого.
-        })
-        Map.geoObjects.add(myPlacemark);
 
-      })*/
+  const centerCoord =
+    !data?.zones || data?.zones.length === 0
+      ? [55.7522, 37.6156]
+      : [data?.zones[0].lat, data?.zones[0].long];
 
-  let newPoints;
-  if (freePlaces) {
-    newPoints = freePlaces.map((item) => {
-      return (
-        <Placemark
-          key={Math.random()}
-          geometry={item}
-          options={{ preset: "islands#darkGreenAutoIcon" }}
-        />
-      );
-    });
-  }
+  const mapState = {
+    center: centerCoord,
+    zoom: 18,
+    controls: [],
+  };
+
   return (
     <YMaps query={{ lang: "RU", apikey: apiKey }}>
-      <Map
-        id="map"
-        className="map"
-        defaultState={{
-          center: startPlace.coordinates,
-          zoom: startPlace.zoom,
-          controls: [],
-        }}
-      >
-        {newPoints}
+      <Map id="map" className="map" defaultState={mapState}>
         <GeolocationControl options={{ float: "left" }} />
+        {window.location.pathname === `/camera/${data?.id}`
+          ? data &&
+            data?.zones.map(
+              (el) =>
+                el && (
+                  <Placemark
+                    key={el.internal_id}
+                    geometry={[el.lat, el.long]}
+                    options={{
+                      iconLayout: "default#image",
+                      iconImageHref: iconMapDis,
+                      iconImageSize: [31, 40],
+                    }}
+                  />
+                )
+            )
+          : ""}
         <SearchControl
           options={{ float: "right", placeholderContent: "Поиск адреса" }}
         />

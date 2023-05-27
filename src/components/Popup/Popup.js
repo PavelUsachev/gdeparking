@@ -1,44 +1,45 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Popup.css";
 import back from "../../img/back.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getCamera, getCameras } from "../../store/camera.js";
 
-function Popup({
-  clickOnBack,
-  checkedAddress,
-  setAddressRoute,
-  onClick,
-  data,
-}) {
+function Popup() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cameraAll = useSelector((state) => state?.camera?.cameras);
 
-  const list = data.map((item) => {
-    const itemClass = `popup__list-item ${
-      (item.coordinates[0] === checkedAddress.coordinates[0]) &
-      (item.coordinates[1] === checkedAddress.coordinates[1])
-        ? "item-active"
-        : ""
-    }`;
+  function handleClick(event, id) {
+    dispatch(getCamera(id));
+    navigate(`/camera/${id}`);
+  }
 
-    function handleClick(event) {
-      onClick(event);
-      setAddressRoute(true);
-      navigate("/start");
-    }
+  const clickOnBack = () => {
+    navigate(-1);
+  };
 
-    return (
-      <Link key={item.id} className={itemClass} onClick={handleClick}>
-        {item.address}
-      </Link>
-    );
-  });
+  useEffect(() => {
+    dispatch(getCameras());
+  }, []);
 
   return (
     <div className="popup">
-      <Link to="/start" className="popup__btn" onClick={clickOnBack}>
+      <div className="popup__btn" onClick={clickOnBack}>
         <img className="popup__btn-logo" src={back} alt="Стрелка назад" />
         <span className="popup__btn-text">Назад</span>
-      </Link>
-      <nav className="popup__list">{list}</nav>
+      </div>
+      {cameraAll.map((item) => {
+        return (
+          <div
+            key={item.id}
+            className="popup__list-item"
+            onClick={(evt) => handleClick(evt, item.id)}
+          >
+            {item.address}
+          </div>
+        );
+      })}
       <button className="popup__add-adress">Добавить новый</button>
     </div>
   );

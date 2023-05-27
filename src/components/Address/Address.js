@@ -6,6 +6,7 @@ function Address({ place }) {
   const roundClass = `lights__round ${
     place.freePlaces.length === 0 ? "red" : ""
   }`;
+
   return (
     <>
       <div className="lights">
