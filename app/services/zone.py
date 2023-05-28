@@ -24,13 +24,12 @@ class CRUDZone(CRUDBase):
         )
         existing_zones = existing_zones.scalars().all()
         for zone in existing_zones:
+            await session.refresh(zone)
             if zone.internal_id in zones_internal_ids:
                 id_index = zones_internal_ids.index(zone.internal_id)
                 input_id = 'zone_' + str(zones_internal_ids.pop(id_index))
                 setattr(zone, 'status', input_zones[input_id])
-                #FIXME! вот тут вызвали метод, удалить при поломке
-                zone = self._enrich_with_coords(zone, session)
-                session.add(zone)
+                await self._enrich_with_coords(zone, session)
             else:
                 await session.delete(zone)
         for zone_id in zones_internal_ids:
@@ -40,27 +39,23 @@ class CRUDZone(CRUDBase):
                 status=bool(input_zones[input_id]),
                 camera_id=camera_id
             )
-            # FIXME! вот тут вызвали метод, удалить при поломке
-            session.add(self._enrich_with_coords(db_zone, session))
-            # session.add(db_zone)
+            await self._enrich_with_coords(db_zone, session)
         await session.commit()
 
     async def _enrich_with_coords(self, zone, session):
-        if zone.long != 0 and zone.lat != 0:
+        if zone.long and zone.lat:
             return zone
         coord_camera = COORDINATES.get(zone.camera_id)
         if coord_camera is None:
             return zone
-        coord_zone = coord_camera.get(zone.id)
+        coord_zone = coord_camera.get(zone.internal_id)
         if coord_zone:
             zone.long = coord_zone.get('long', 0)
             zone.lat = coord_zone.get('lat', 0)
-            session.add(zone)
-            await session.commit()
-            await session.refrest(zone)
+        session.add(zone)
+        await session.commit()
+        await session.refresh(zone)
         return zone
-
-
 
 
 zone_crud = CRUDZone(Zone)

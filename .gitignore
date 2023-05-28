@@ -132,3 +132,5 @@ dmypy.json
 .idea
 
 fastapi.db
+
+.DS_Store
