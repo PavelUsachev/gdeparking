@@ -1,6 +1,7 @@
 import os
 import json
 import time
+import gc
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -81,9 +82,9 @@ def image_zone_preprocessing(zone_img_data):
 
 def park_place_detection(driver_, cam_url, camera_id, net, park_zones, t_sleep):
     pred_data = []
+    video_file = f"./temp/tmp_{camera_id}.mp4"
     connect_time_status = get_video(driver_, cam_url, camera_id, t_sleep)
     if connect_time_status is not None:
-        video_file = f"./temp/tmp_{camera_id}.mp4"
         try:
             clip = VideoFileClip(video_file)
             last_frame = clip.get_frame(clip.duration - 1)[:, :, ::-1]
@@ -97,34 +98,32 @@ def park_place_detection(driver_, cam_url, camera_id, net, park_zones, t_sleep):
                 pred_data.append((zone["name"], int(predict)))
         except:
             connect_time_status = None
-
     if os.path.exists(video_file):
         os.remove(video_file)
     return pred_data, connect_time_status
 
 
 def one_cam_threading(cam_nb, server_address):
-    web_driver = None
+
+    model_path = "./cv_model/parking_detect.onnx"
+    model = cv2.dnn.readNetFromONNX(model_path)
+
+    with open(f"./devices_metadata/{cam_nb}_metadata.txt", "r") as f:
+        data = f.read()
+    metadata = json.loads(data)
+
+    url = metadata["cam_url"]
+    zones = metadata["detect_zones"]
+    sleep_time = metadata["update_period"] // 2 + 1
+
+    detection = True
+    last_prediction = None
+    last_connection_time = None
 
     while True:
+        web_driver = None
         try:
-            with open(f"./devices_metadata/{cam_nb}_metadata.txt", "r") as f:
-                data = f.read()
-            metadata = json.loads(data)
-
-            detection = True
-            last_prediction = None
-            last_connection_time = None
-
-            url = metadata["cam_url"]
-            zones = metadata["detect_zones"]
-            sleep_time = metadata["update_period"] // 2 + 1
-
-            model_path = "./cv_model/parking_detect.onnx"
-            model = cv2.dnn.readNetFromONNX(model_path)
-
             web_driver = driver_init()
-
             while detection:
                 prediction, connection_time = park_place_detection(web_driver, url, cam_nb, model, zones, sleep_time)
 
@@ -146,19 +145,27 @@ def one_cam_threading(cam_nb, server_address):
                                                 "park_places_nb": len(zones),
                                                 "timezone": metadata["timezone"],
                                                 "update_period": metadata["update_period"]}}
-                if server_address is not None:
+                if server_address is not None and last_prediction is not None:
                     package = requests.post(server_address, json=detection_result)
                     if package.status_code != 200:
-                        print(f"Failed to send {cam_nb} data package!", flush=True)
+                        print(f"Unsuccessful attempt to send JSON with detection result for device {cam_nb}!",
+                              flush=True)
+                elif last_prediction is None:
+                    pass
                 else:
                     print(f"Camera {cam_nb.split('_')[-1]}:\nlast_connection: {last_connection_time}\ndetection_result:"
                           f"{last_prediction}", flush=True)
+                for i in range(3):
+                    gc.collect()
         except Exception as e:
             print(f"An error occurred in thread-{cam_nb.split('_')[-1].split('0')[-1]}: {e}. Restarting the thread...",
                   flush=True)
             if web_driver is not None:
                 web_driver.quit()
             time.sleep(10)
+        finally:
+            for i in range(3):
+                gc.collect()
 
     if web_driver is not None:
         web_driver.quit()
