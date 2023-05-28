@@ -44,9 +44,13 @@ function MapComponent({ data }) {
                 )
             )
           : ""}
-        <SearchControl
-          options={{ float: "right", placeholderContent: "Поиск адреса" }}
-        />
+        {window.location.pathname === `/camera/${data?.id}` ? (
+          ""
+        ) : (
+          <SearchControl
+            options={{ float: "right", placeholderContent: "Поиск адреса" }}
+          />
+        )}
       </Map>
     </YMaps>
   );

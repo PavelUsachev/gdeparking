@@ -13,7 +13,7 @@ export const getCameras = createAsyncThunk("getCameras", async () => {
 
 const initialState = {
   camera: [],
-  cameras: [],
+  cameras: null,
   loaders: {
     common: false,
   },
