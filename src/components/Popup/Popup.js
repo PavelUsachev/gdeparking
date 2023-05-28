@@ -10,7 +10,7 @@ function Popup() {
   const dispatch = useDispatch();
   const cameraAll = useSelector((state) => state?.camera?.cameras);
 
-  function handleClick(event, id) {
+  function handleClick(evt, id) {
     dispatch(getCamera(id));
     navigate(`/camera/${id}`);
   }
@@ -29,17 +29,21 @@ function Popup() {
         <img className="popup__btn-logo" src={back} alt="Стрелка назад" />
         <span className="popup__btn-text">Назад</span>
       </div>
-      {cameraAll.map((item) => {
-        return (
-          <div
-            key={item.id}
-            className="popup__list-item"
-            onClick={(evt) => handleClick(evt, item.id)}
-          >
-            {item.address}
-          </div>
-        );
-      })}
+      {cameraAll ? (
+        cameraAll.map((item) => {
+          return (
+            <div
+              key={item.id}
+              className="popup__list-item"
+              onClick={(evt) => handleClick(evt, item.id)}
+            >
+              {item.address}
+            </div>
+          );
+        })
+      ) : (
+        <p className="popup__text">Нет адресов</p>
+      )}
       <button className="popup__add-adress">Добавить новый</button>
     </div>
   );

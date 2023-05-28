@@ -11,7 +11,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-
+  margin: 20px;
 }
 
 .popup__list {
@@ -24,11 +24,11 @@
   border: none;
   display: flex;
   flex-direction: row;
-  margin: 20px;
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
   text-decoration: none;
+  margin-bottom: 20px;
 }
 
 .popup__btn-logo {
@@ -81,4 +81,15 @@
   cursor: pointer;
   height: 52px;
   margin-left: 32px;
+}
+
+.popup__text{
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 23px;
+  color: #000000;
+  display: flex;
+  justify-content: center;
 }
