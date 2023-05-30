@@ -7,7 +7,8 @@ import {
   SearchControl,
 } from "@pbe/react-yandex-maps";
 import "./MapComponent.css";
-import iconMapDis from "../../img/icon.svg";
+import iconMapGreen from "../../img/iconGreen.svg";
+import iconMapRed from "../../img/iconRed.svg";
 
 function MapComponent({ data }) {
   const apiKey = process.env.REACT_APP_YAMAP_API;
@@ -29,19 +30,28 @@ function MapComponent({ data }) {
         <GeolocationControl options={{ float: "left" }} />
         {window.location.pathname === `/camera/${data?.id}`
           ? data &&
-            data?.zones.map(
-              (el) =>
-                el && (
-                  <Placemark
-                    key={el.internal_id}
-                    geometry={[el.lat, el.long]}
-                    options={{
-                      iconLayout: "default#image",
-                      iconImageHref: iconMapDis,
-                      iconImageSize: [31, 40],
-                    }}
-                  />
-                )
+            data?.zones.map((el) =>
+              el.status === 1 ? (
+                <Placemark
+                  key={el.internal_id}
+                  geometry={[el.lat, el.long]}
+                  options={{
+                    iconLayout: "default#image",
+                    iconImageHref: iconMapGreen,
+                    iconImageSize: [31, 40],
+                  }}
+                />
+              ) : (
+                <Placemark
+                  key={el.internal_id}
+                  geometry={[el.lat, el.long]}
+                  options={{
+                    iconLayout: "default#image",
+                    iconImageHref: iconMapRed,
+                    iconImageSize: [31, 40],
+                  }}
+                />
+              )
             )
           : ""}
         {window.location.pathname === `/camera/${data?.id}` ? (

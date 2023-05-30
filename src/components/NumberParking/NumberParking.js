@@ -1,5 +1,4 @@
 import "./NumberParking.css";
-
 import pin from "../../img/pin.png";
 
 function NumberParking({ data }) {
