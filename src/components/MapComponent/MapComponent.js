@@ -31,7 +31,7 @@ function MapComponent({ data }) {
         {window.location.pathname === `/camera/${data?.id}`
           ? data &&
             data?.zones.map((el) =>
-              el.status === 1 ? (
+              el.status === 0 ? (
                 <Placemark
                   key={el.internal_id}
                   geometry={[el.lat, el.long]}
