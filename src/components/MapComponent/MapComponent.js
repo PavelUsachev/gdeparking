@@ -8,7 +8,6 @@ import {
 } from "@pbe/react-yandex-maps";
 import "./MapComponent.css";
 import iconMapGreen from "../../img/iconGreen.svg";
-import iconMapRed from "../../img/iconRed.svg";
 
 function MapComponent({ data }) {
   const apiKey = process.env.REACT_APP_YAMAP_API;
@@ -42,15 +41,7 @@ function MapComponent({ data }) {
                   }}
                 />
               ) : (
-                <Placemark
-                  key={el.internal_id}
-                  geometry={[el.lat, el.long]}
-                  options={{
-                    iconLayout: "default#image",
-                    iconImageHref: iconMapRed,
-                    iconImageSize: [31, 40],
-                  }}
-                />
+                ""
               )
             )
           : ""}
