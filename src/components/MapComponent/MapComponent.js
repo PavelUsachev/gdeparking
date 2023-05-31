@@ -7,7 +7,7 @@ import {
   SearchControl,
 } from "@pbe/react-yandex-maps";
 import "./MapComponent.css";
-import iconMapGreen from "../../img/iconGreen.svg";
+import iconMap from "../../img/icon.svg";
 
 function MapComponent({ data }) {
   const apiKey = process.env.REACT_APP_YAMAP_API;
@@ -36,7 +36,7 @@ function MapComponent({ data }) {
                   geometry={[el.lat, el.long]}
                   options={{
                     iconLayout: "default#image",
-                    iconImageHref: iconMapGreen,
+                    iconImageHref: iconMap,
                     iconImageSize: [31, 40],
                   }}
                 />
