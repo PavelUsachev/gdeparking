@@ -103,10 +103,7 @@ def park_place_detection(driver_, cam_url, camera_id, net, park_zones, t_sleep):
     return pred_data, connect_time_status
 
 
-def one_cam_threading(cam_nb, server_address):
-
-    model_path = "./cv_model/parking_detect.onnx"
-    model = cv2.dnn.readNetFromONNX(model_path)
+def one_cam_threading(cam_nb, server_address, model):
 
     with open(f"./devices_metadata/{cam_nb}_metadata.txt", "r") as f:
         data = f.read()
@@ -114,7 +111,7 @@ def one_cam_threading(cam_nb, server_address):
 
     url = metadata["cam_url"]
     zones = metadata["detect_zones"]
-    sleep_time = metadata["update_period"] // 2 + 1
+    sleep_time = 25
 
     detection = True
     last_prediction = None
@@ -175,6 +172,9 @@ if __name__ == "__main__":
 
     print("Service starts...", flush=True)
 
+    model_path = "./cv_model/parking_detect.onnx"
+    cv_model = cv2.dnn.readNetFromONNX(model_path)
+
     load_dotenv()
     api_url = os.getenv("API_URL")
 
@@ -186,10 +186,11 @@ if __name__ == "__main__":
     for _, _, files in os.walk("./devices_metadata"):
         for filename in files:
             cam_id = '_'.join(filename.split('_')[:2])
-            t = threading.Thread(target=one_cam_threading, args=(cam_id, api_url,))
+            t = threading.Thread(target=one_cam_threading, args=(cam_id, api_url, cv_model,))
             t.start()
             threads.append(t)
             print(f"Thread-{cam_id.split('_')[-1].split('0')[-1]} started.", flush=True)
+            time.sleep(5)
 
     for t in threads:
         t.join()
